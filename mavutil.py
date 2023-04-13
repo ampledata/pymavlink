@@ -1056,14 +1056,20 @@ class mavudp(mavfile):
         self.port = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.udp_server = input
         self.broadcast = False
+
+        input = True
         if input:
             self.port.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.port.bind((a[0], int(a[1])))
+            # self.port.bind((a[0], int(a[1])))
+            self.port.bind(("0.0.0.0", int(a[1])))
         else:
             self.destination_addr = (a[0], int(a[1]))
             if broadcast:
                 self.port.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
                 self.broadcast = True
+
+        self.destination_addr = (a[0], int(a[1]))
+
         set_close_on_exec(self.port.fileno())
         self.port.setblocking(0)
         self.last_address = None
